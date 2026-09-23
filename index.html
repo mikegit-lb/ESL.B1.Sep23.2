@@ -1,0 +1,1139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Vanishing Trophy</title>
+<style>
+  :root{
+    --bg:#fbfaf8;
+    --surface:#ffffff;
+    --surface-2:#f5f3ef;
+    --ink:#211f2b;
+    --ink-soft:#726e7d;
+    --accent:#d94f2b;
+    --accent-ink:#ffffff;
+    --accent-soft:#fbe6de;
+    --twist:#332a55;
+    --twist-soft:#eeecf7;
+    --gold:#c98a1f;
+    --gold-soft:#faf0dc;
+    --line:#e9e6df;
+    --shadow: 0 12px 28px -20px rgba(33,26,44,0.18);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    padding-inline:16px;
+  }
+  h1,h2,h3{
+    font-family:"Fraunces", Georgia, "Times New Roman", serif;
+    text-wrap:balance;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .wrap{
+    max-width:780px;
+    margin-inline:auto;
+    padding-block:32px 80px;
+  }
+
+  /* ---- masthead ---- */
+  .masthead{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    padding-block:8px 28px;
+    border-bottom:2px solid var(--line);
+    margin-bottom:28px;
+  }
+  .kicker{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:"JetBrains Mono", ui-monospace, monospace;
+    font-size:11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--accent);
+  }
+  .kicker::before{
+    content:"";
+    width:22px;height:2px;
+    background:var(--accent);
+    display:inline-block;
+  }
+  .title-row{
+    display:flex;
+    align-items:flex-end;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .emoji-badge{
+    font-size:44px;
+    line-height:1;
+    filter:drop-shadow(0 6px 10px rgba(0,0,0,0.12));
+  }
+  .title-block h1{
+    font-size:clamp(32px,7vw,46px);
+    font-weight:600;
+  }
+  .title-block p{
+    margin:4px 0 0;
+    color:var(--ink-soft);
+    font-size:17px;
+    font-style:italic;
+    font-family:"Fraunces", serif;
+  }
+  .meta-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:4px;
+  }
+  .chip{
+    font-family:"JetBrains Mono", ui-monospace, monospace;
+    font-size:11px;
+    letter-spacing:0.04em;
+    padding:5px 10px;
+    border-radius:999px;
+    background:var(--surface-2);
+    color:var(--ink-soft);
+    border:1px solid var(--line);
+  }
+
+  /* ---- jump nav ---- */
+  nav.jump{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    padding-bottom:6px;
+    margin-bottom:30px;
+    scrollbar-width:none;
+  }
+  nav.jump::-webkit-scrollbar{display:none;}
+  nav.jump a{
+    flex:0 0 auto;
+    text-decoration:none;
+    font-family:"JetBrains Mono", ui-monospace, monospace;
+    font-size:12px;
+    color:var(--ink);
+    background:var(--surface);
+    border:1px solid var(--line);
+    padding:8px 13px;
+    border-radius:999px;
+    white-space:nowrap;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  nav.jump a:hover{ border-color:var(--accent); color:var(--accent); }
+
+  /* ---- mascot speech bubble ---- */
+  .mascot{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    margin:18px 0;
+  }
+  .mascot .avatar{
+    font-size:26px;
+    line-height:1;
+    flex:0 0 auto;
+    animation: sway 3.4s ease-in-out infinite;
+  }
+  @keyframes sway{
+    0%,100%{ transform:rotate(-4deg); }
+    50%{ transform:rotate(4deg); }
+  }
+  .mascot .bubble{
+    position:relative;
+    background:var(--twist-soft);
+    color:var(--twist);
+    padding:10px 14px;
+    border-radius:4px 14px 14px 14px;
+    font-size:14px;
+    font-family:"Fraunces", serif;
+    font-style:italic;
+    max-width:54ch;
+  }
+  .mascot.accent .bubble{ background:var(--accent-soft); color:var(--accent); }
+
+  /* ---- section shell ---- */
+  section.block{
+    margin-bottom:52px;
+    scroll-margin-top:16px;
+  }
+  .block-label{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:14px;
+  }
+  .block-num{
+    font-family:"Fraunces", serif;
+    font-weight:600;
+    font-size:13px;
+    width:26px;height:26px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--twist);
+    color:var(--surface);
+    flex:0 0 auto;
+  }
+  .block-label h2{
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    font-family:"JetBrains Mono", ui-monospace, monospace;
+    font-weight:500;
+    color:var(--ink-soft);
+  }
+
+  /* ---- article ---- */
+  .article{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:clamp(20px,4vw,40px);
+    box-shadow:var(--shadow);
+  }
+  .article.compact{ padding:clamp(18px,3.5vw,30px); }
+  .article h3.headline{
+    font-size:clamp(22px,4.5vw,30px);
+    font-weight:700;
+    margin-bottom:8px;
+  }
+  .article.compact h3.headline{ font-size:clamp(19px,3.5vw,24px); }
+  .article .teaser{
+    color:var(--ink-soft);
+    font-style:italic;
+    margin-bottom:20px;
+    font-family:"Fraunces", serif;
+    font-size:17px;
+  }
+  .legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-bottom:26px;
+    padding:12px 16px;
+    background:var(--surface-2);
+    border-radius:10px;
+    font-size:13px;
+  }
+  .legend span{ display:flex; align-items:center; gap:6px; color:var(--ink-soft); }
+  .legend i{ width:12px; height:12px; border-radius:3px; display:inline-block; }
+  .legend i.ps{ background:var(--twist); }
+  .legend i.pp{ background:var(--accent); }
+  .article h4{
+    font-family:"Fraunces", serif;
+    font-size:19px;
+    font-weight:600;
+    margin:26px 0 10px;
+  }
+  .article p{ margin:0 0 14px; max-width:64ch; }
+  .ps{
+    color:var(--twist);
+    font-weight:700;
+    border-bottom:2px solid var(--twist-soft);
+  }
+  .pp{
+    color:var(--accent);
+    font-style:italic;
+    font-weight:700;
+    border-bottom:2px solid var(--accent-soft);
+  }
+  .connector{
+    background:var(--gold-soft);
+    padding:0.02em 0.35em;
+    border-radius:4px;
+  }
+  .vword{
+    background:var(--twist);
+    color:var(--surface);
+    padding:0.02em 0.4em;
+    border-radius:4px;
+    font-weight:600;
+    font-style:normal;
+  }
+  .cta-line{
+    margin-top:24px;
+    padding-top:18px;
+    border-top:1px dashed var(--line);
+    font-weight:600;
+    color:var(--twist);
+  }
+
+  /* ---- generic cards ---- */
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:22px clamp(18px,4vw,28px);
+  }
+  .card + .card{ margin-top:14px; }
+  .card h4{
+    font-family:"Fraunces", serif;
+    font-size:17px;
+    margin:0 0 10px;
+  }
+  .card .sub{ color:var(--ink-soft); font-size:14px; margin-top:-4px; margin-bottom:14px; }
+
+  /* ---- vocabulary bank ---- */
+  .vocab-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:10px;
+    margin-top:6px;
+  }
+  @media (max-width:640px){ .vocab-grid{ grid-template-columns:repeat(2, 1fr); } }
+  @media (max-width:420px){ .vocab-grid{ grid-template-columns:1fr; } }
+  .vocab-card{
+    background:var(--surface-2);
+    border-radius:10px;
+    padding:12px 14px;
+  }
+  .vocab-card .w{
+    font-family:"Fraunces", serif;
+    font-weight:600;
+    font-size:15px;
+    color:var(--twist);
+  }
+  .vocab-card .d{
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin-top:3px;
+  }
+  .vocab-card .e{
+    font-size:12px;
+    font-style:italic;
+    margin-top:5px;
+    color:var(--ink);
+  }
+  .vocab-note{
+    margin-top:16px;
+    font-size:13px;
+    color:var(--ink-soft);
+    font-style:italic;
+  }
+
+  /* ---- icebreaker / fact box ---- */
+  .fact-box{
+    margin:16px 0;
+    padding:16px 18px;
+    background:linear-gradient(135deg, var(--twist-soft), var(--accent-soft));
+    border-radius:12px;
+    font-size:14.5px;
+  }
+  .fact-box b{ color:var(--twist); }
+  .fact-box .tr-example{
+    margin-top:8px;
+    font-family:"JetBrains Mono", monospace;
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+  .truth-lie{
+    list-style:none;
+    margin:14px 0 0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .truth-lie li{
+    background:var(--surface-2);
+    padding:10px 14px;
+    border-radius:8px;
+    font-size:14.5px;
+  }
+  .truth-lie li b{
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    color:var(--accent);
+    margin-right:6px;
+  }
+
+  /* ---- grammar contrast ---- */
+  .contrast-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin:16px 0 22px;
+  }
+  @media (max-width:520px){ .contrast-grid{ grid-template-columns:1fr; } }
+  .contrast-col{
+    border-radius:12px;
+    padding:16px 18px;
+  }
+  .contrast-col.ps-col{ background:var(--twist-soft); border-left:3px solid var(--twist); }
+  .contrast-col.pp-col{ background:var(--accent-soft); border-left:3px solid var(--accent); }
+  .contrast-col h5{
+    margin:0 0 8px;
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--ink-soft);
+  }
+  .contrast-col p{ margin:0; font-family:"Fraunces", serif; font-style:italic; font-size:15px; }
+
+  .timeline{ margin:18px 0; }
+  .timeline svg{ width:100%; height:auto; display:block; }
+  .timeline text{ font-family:"JetBrains Mono", monospace; font-size:11px; fill:var(--ink-soft); }
+
+  .cq{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    margin-bottom:10px;
+  }
+  .cq-num{
+    font-family:"JetBrains Mono", monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+    flex:0 0 18px;
+  }
+  .rule-box{
+    margin-top:16px;
+    padding:16px 18px;
+    background:var(--gold-soft);
+    border-radius:10px;
+    font-family:"Fraunces", serif;
+    font-size:16px;
+  }
+  .blank{
+    display:inline-block;
+    border-bottom:2px solid var(--gold);
+    min-width:70px;
+    height:1em;
+  }
+
+  /* ---- tense detective quiz ---- */
+  .td-item{
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .td-item:last-child{ border-bottom:none; }
+  .td-sentence{ font-family:"Fraunces", serif; font-style:italic; font-size:15.5px; margin-bottom:8px; }
+  .td-buttons{ display:flex; gap:8px; align-items:center; position:relative; }
+  .td-buttons button{
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    letter-spacing:0.03em;
+    padding:6px 12px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .td-buttons button:hover{ border-color:var(--ink-soft); }
+  .confetti-zone{ position:relative; display:inline-block; width:1px; height:1px; }
+  .confetti-piece{
+    position:absolute;
+    left:0; top:0;
+    font-size:18px;
+    opacity:0;
+    pointer-events:none;
+    animation: pop 0.9s ease-out forwards;
+  }
+  @keyframes pop{
+    0%{ transform:translate(0,0) scale(0.4) rotate(0deg); opacity:1; }
+    100%{ transform:translate(var(--dx), var(--dy)) scale(1.1) rotate(var(--rot)); opacity:0; }
+  }
+  .td-answer{
+    display:none;
+    margin-top:8px;
+    font-size:13.5px;
+    color:var(--ink-soft);
+  }
+  .td-answer.show{ display:block; }
+  .td-answer b{ color:var(--ink); }
+  .td-answer .joke{ display:block; margin-top:4px; color:var(--accent); font-style:italic; }
+
+  details.answer-key{
+    margin-top:18px;
+    border-top:1px solid var(--line);
+    padding-top:14px;
+  }
+  details.answer-key summary{
+    cursor:pointer;
+    font-family:"JetBrains Mono", monospace;
+    font-size:12px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--twist);
+  }
+
+  /* ---- speaking studio ---- */
+  .activity{
+    padding:20px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .activity:last-child{ border-bottom:none; padding-bottom:0; }
+  .activity:first-child{ padding-top:0; }
+  .mission-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:"JetBrains Mono", monospace;
+    font-size:12px;
+    padding:6px 12px;
+    border-radius:999px;
+    margin-bottom:14px;
+  }
+  .mission-tag.a{ background:var(--twist); color:var(--surface); }
+  .mission-tag.b{ background:var(--accent); color:var(--accent-ink); }
+  .mission-tag.c{ background:var(--gold); color:#2a1f05; }
+  .mission-tag.d{ background:var(--twist-soft); color:var(--twist); }
+  .mission-tag.e{ background:var(--accent-soft); color:var(--accent); }
+
+  .role-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin:14px 0;
+  }
+  @media (max-width:520px){ .role-grid{ grid-template-columns:1fr; } }
+  .role-card{
+    background:var(--surface-2);
+    border-radius:10px;
+    padding:14px 16px;
+  }
+  .role-card h5{
+    margin:0 0 8px;
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--ink-soft);
+  }
+  .role-card ul{ margin:0; padding-left:18px; font-size:14px; }
+  .role-card li{ margin-bottom:5px; }
+
+  .starters{
+    list-style:none;
+    margin:10px 0 0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .starters li{
+    background:var(--surface-2);
+    padding:10px 14px;
+    border-radius:8px;
+    font-family:"Fraunces", serif;
+    font-style:italic;
+    font-size:15px;
+  }
+  .starters b{ font-style:normal; }
+  .starters li.ps-line b{ color:var(--twist); }
+  .starters li.pp-line b{ color:var(--accent); }
+
+  .checklist{
+    list-style:none;
+    margin:14px 0 0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .checklist li{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+  }
+  .checklist input[type="checkbox"]{
+    margin-top:3px;
+    accent-color:var(--accent);
+    width:16px;height:16px;
+    flex:0 0 auto;
+  }
+  .checklist label{ cursor:pointer; }
+
+  .timing-strip{
+    display:flex;
+    gap:2px;
+    margin-top:16px;
+    border-radius:10px;
+    overflow:hidden;
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+  }
+  .timing-strip span{
+    flex:1;
+    background:var(--surface-2);
+    padding:10px 8px;
+    text-align:center;
+    color:var(--ink-soft);
+  }
+  .timing-strip span.active{ background:var(--twist); color:var(--surface); font-weight:700; }
+  .timing-strip span.active.b{ background:var(--accent); color:var(--accent-ink); }
+  .timing-strip span.active.c{ background:var(--gold); color:#2a1f05; }
+
+  hr.divider{
+    border:none;
+    border-top:1px dashed var(--line);
+    margin:26px 0;
+  }
+
+  /* ---- suspect line-up ---- */
+  .suspect-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:10px;
+    margin:14px 0;
+  }
+  @media (max-width:560px){ .suspect-grid{ grid-template-columns:1fr; } }
+  .suspect-card{
+    background:var(--surface-2);
+    border-radius:10px;
+    padding:12px 14px;
+    text-align:center;
+  }
+  .suspect-card .s-emoji{ font-size:28px; }
+  .suspect-card .s-name{ font-family:"Fraunces", serif; font-weight:600; margin-top:4px; }
+  .suspect-card .s-detail{ font-size:12px; color:var(--ink-soft); margin-top:4px; }
+
+  /* ---- debate ---- */
+  .debate-prompts{
+    list-style:none;
+    margin:14px 0 0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .debate-prompts li{
+    padding:12px 14px;
+    background:var(--twist-soft);
+    border-left:3px solid var(--twist);
+    border-radius:0 8px 8px 0;
+    font-size:14.5px;
+  }
+
+  /* ---- blooper reel ---- */
+  .blooper{
+    margin-top:16px;
+    padding:16px 18px;
+    background:var(--surface-2);
+    border-radius:12px;
+    font-size:14px;
+  }
+  .blooper h5{
+    margin:0 0 8px;
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--ink-soft);
+  }
+  .blooper ul{ margin:0; padding-left:18px; }
+  .blooper li{ margin-bottom:6px; }
+
+  /* ---- assignment ---- */
+  .assignment-box{
+    margin-top:20px;
+    padding:18px 20px;
+    background:var(--twist);
+    color:var(--surface);
+    border-radius:14px;
+  }
+  .assignment-box h5{
+    margin:0 0 10px;
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    opacity:0.75;
+  }
+  .assignment-box ol{ margin:0; padding-left:20px; }
+  .assignment-box li{ margin-bottom:8px; font-size:14.5px; }
+  .assignment-box li::marker{ color:var(--gold); font-family:"JetBrains Mono", monospace; }
+
+  /* ---- teacher notes ---- */
+  .notes-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+  }
+  @media (max-width:560px){ .notes-grid{ grid-template-columns:1fr; } }
+  .note{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-left:3px solid var(--twist);
+    border-radius:0 12px 12px 0;
+    padding:16px 18px;
+  }
+  .note.warn{ border-left-color:var(--accent); }
+  .note h5{
+    margin:0 0 6px;
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--ink-soft);
+  }
+  .note p{ margin:0; font-size:14px; }
+  .note.full{ grid-column:1 / -1; }
+
+  footer{
+    margin-top:60px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+    font-family:"JetBrains Mono", monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .mascot .avatar{ animation:none; }
+    .confetti-piece{ animation:none; opacity:0; }
+  }
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="kicker">Glow-Up English &middot; 1:1 Speaking Session</div>
+    <div class="title-row">
+      <div class="emoji-badge">🕵️</div>
+      <div class="title-block">
+        <h1>The Vanishing Trophy</h1>
+        <p>Everyone had a story. Only one of them was true.</p>
+      </div>
+    </div>
+    <div class="meta-row">
+      <span class="chip">Grammar &middot; Past Simple vs. Past Perfect</span>
+      <span class="chip">3 Texts</span>
+      <span class="chip">30 Vocabulary Words</span>
+      <span class="chip">5 Speaking Activities</span>
+      <span class="chip">🐱 with Detective Kedi</span>
+    </div>
+  </header>
+
+  <nav class="jump">
+    <a href="#reading">Text 1</a>
+    <a href="#vocab">Vocabulary</a>
+    <a href="#text2">Text 2</a>
+    <a href="#grammar">Grammar</a>
+    <a href="#detective">Tense Detective</a>
+    <a href="#speaking">Speaking Studio</a>
+    <a href="#assignment">Text 3 + Assignment</a>
+    <a href="#teacher">Teacher Notes</a>
+  </nav>
+
+  <section class="block" id="reading">
+    <div class="block-label"><span class="block-num">1</span><h2>Text 1 &middot; Lesson Reading</h2></div>
+
+    <div class="mascot">
+      <span class="avatar">🐱</span>
+      <p class="bubble">Merhaba! I'm Kedi, your detective sidekick for today. Spoiler: I already know who did it. I'm not telling. Read the case file. 🔍</p>
+    </div>
+
+    <article class="article">
+      <h3 class="headline">I Accused My Best Friend &mdash; Then I Remembered</h3>
+      <p class="teaser">A missing trophy, three suspects, and a memory that changed everything.</p>
+
+      <div class="legend">
+        <span><i class="ps"></i> Past Simple &mdash; the main story, one event after another</span>
+        <span><i class="pp"></i> Past Perfect &mdash; something that happened even earlier</span>
+      </div>
+
+      <h4>The Trophy That Disappeared</h4>
+      <p>On Friday afternoon, the school's biggest trophy <span class="ps">vanished</span> from the display case. Ms. Ortiz <span class="ps">walked</span> into the hall and <span class="ps">found</span> the case empty. Someone <span class="pp">had broken</span> the lock two days earlier, and nobody <span class="pp">had noticed</span> until now. It was, by every measure, a total <span class="vword">mystery</span>.</p>
+
+      <h4>My Prime Suspect</h4>
+      <p>I immediately <span class="ps">thought</span> of Jonas. He <span class="pp">had been acting</span> <span class="vword">suspicious</span> all week &mdash; skipping lunch, avoiding eye contact, disappearing during breaks. When I <span class="ps">confronted</span> him in the hallway, he <span class="ps">turned</span> pale and <span class="ps">admitted</span> he <span class="pp">had been hiding</span> something. My stomach dropped. I was sure I <span class="pp">had caught</span> the thief &mdash; and honestly, I felt a little <span class="vword">guilty</span> for enjoying it.</p>
+
+      <h4>The Twist</h4>
+      <p>Jonas <span class="pp">hadn't stolen</span> anything. <span class="connector">Turns out</span>, he <span class="pp">had been secretly rehearsing</span> a magic trick for the talent show &mdash; using a trophy-shaped prop he <span class="pp">had borrowed</span> from the drama department. The real <span class="vword">evidence</span>? I <span class="ps">found</span> it myself, in a box I <span class="pp">had moved</span> to the storage room the week before, when I <span class="pp">had helped</span> Ms. Ortiz clean the display case. I <span class="ps">had forgotten</span> completely. <span class="connector">In the end</span>, I <span class="ps">apologized</span> to Jonas about seventeen times, and he still brings it up.</p>
+
+      <p class="cta-line">So &mdash; have you ever accused the wrong person, or gotten blamed for something you didn't do? Tell me the story out loud &mdash; you'll need both tenses to make it land.</p>
+    </article>
+
+    <div class="mascot accent">
+      <span class="avatar">🐱</span>
+      <p class="bubble">Real talk: Jonas practicing a magic trick with a fake trophy is the most "theatre kid" plot twist I've ever heard. 10/10, no notes.</p>
+    </div>
+  </section>
+
+  <section class="block" id="vocab">
+    <div class="block-label"><span class="block-num">2</span><h2>Vocabulary Bank</h2></div>
+    <div class="card">
+      <h4>30 words for telling a good twist</h4>
+      <p class="sub">Say each word out loud once before we move on. Some of these you already half-know &mdash; trust that instinct.</p>
+
+      <div class="vocab-grid">
+        <div class="vocab-card"><div class="w">clue</div><div class="d">a piece of information that helps solve a mystery</div><div class="e">"The open window was the first clue."</div></div>
+        <div class="vocab-card"><div class="w">accuse</div><div class="d">to say someone did something wrong</div><div class="e">"Don't accuse me before you have proof!"</div></div>
+        <div class="vocab-card"><div class="w">secret</div><div class="d">something you don't tell other people</div><div class="e">"She kept the secret for years."</div></div>
+        <div class="vocab-card"><div class="w">suspicious</div><div class="d">making you feel something bad is happening</div><div class="e">"His smile looked suspicious."</div></div>
+        <div class="vocab-card"><div class="w">disappear</div><div class="d">to go somewhere nobody can see you</div><div class="e">"The cat disappeared under the bed."</div></div>
+        <div class="vocab-card"><div class="w">confront</div><div class="d">to talk to someone directly about a problem</div><div class="e">"I had to confront him about the note."</div></div>
+        <div class="vocab-card"><div class="w">guilty</div><div class="d">feeling bad because you did something wrong</div><div class="e">"He looked guilty the moment I asked."</div></div>
+        <div class="vocab-card"><div class="w">coincidence</div><div class="d">when two things happen together by chance</div><div class="e">"What a coincidence &mdash; we wore the same shirt!"</div></div>
+        <div class="vocab-card"><div class="w">nervous</div><div class="d">worried or anxious about something</div><div class="e">"I was nervous before the exam."</div></div>
+        <div class="vocab-card"><div class="w">evidence</div><div class="d">facts or objects that prove something is true</div><div class="e">"The muddy shoes were strong evidence."</div></div>
+        <div class="vocab-card"><div class="w">honest</div><div class="d">telling the truth, not hiding anything</div><div class="e">"Just be honest with me."</div></div>
+        <div class="vocab-card"><div class="w">conceal</div><div class="d">to hide something on purpose</div><div class="e">"She tried to conceal her disappointment."</div></div>
+        <div class="vocab-card"><div class="w">forgive</div><div class="d">to stop being angry at someone</div><div class="e">"I forgave him after he explained."</div></div>
+        <div class="vocab-card"><div class="w">contradict</div><div class="d">to say the opposite of what someone said</div><div class="e">"Her story contradicted his completely."</div></div>
+        <div class="vocab-card"><div class="w">embarrassed</div><div class="d">feeling shy or awkward after a mistake</div><div class="e">"I was so embarrassed I laughed instead."</div></div>
+        <div class="vocab-card"><div class="w">alibi</div><div class="d">proof that you were somewhere else</div><div class="e">"Luckily, I had a solid alibi."</div></div>
+        <div class="vocab-card"><div class="w">mistake</div><div class="d">something done wrong, usually by accident</div><div class="e">"Blaming Jonas was a huge mistake."</div></div>
+        <div class="vocab-card"><div class="w">testify</div><div class="d">to formally say what you saw, as proof</div><div class="e">"She testified that she saw nothing."</div></div>
+        <div class="vocab-card"><div class="w">admit</div><div class="d">to say something is true, even if it's hard</div><div class="e">"I had to admit I was wrong."</div></div>
+        <div class="vocab-card"><div class="w">assumption</div><div class="d">something you believe without checking it's true</div><div class="e">"That was a dangerous assumption to make."</div></div>
+        <div class="vocab-card"><div class="w">surprise</div><div class="d">something unexpected</div><div class="e">"The ending was a total surprise."</div></div>
+        <div class="vocab-card"><div class="w">rehearse</div><div class="d">to practice before the real performance</div><div class="e">"He'd been rehearsing the trick for weeks."</div></div>
+        <div class="vocab-card"><div class="w">innocent</div><div class="d">not guilty &mdash; did nothing wrong</div><div class="e">"He was innocent the whole time."</div></div>
+        <div class="vocab-card"><div class="w">misunderstanding</div><div class="d">when people don't understand each other correctly</div><div class="e">"The whole thing was one big misunderstanding."</div></div>
+        <div class="vocab-card"><div class="w">promise</div><div class="d">to say you will definitely do something</div><div class="e">"I promise I'll listen first next time."</div></div>
+        <div class="vocab-card"><div class="w">overreact</div><div class="d">to respond too strongly to something small</div><div class="e">"I definitely overreacted about the trophy."</div></div>
+        <div class="vocab-card"><div class="w">discover</div><div class="d">to find or learn something for the first time</div><div class="e">"I discovered the trophy in my own box."</div></div>
+        <div class="vocab-card"><div class="w">backfire</div><div class="d">when a plan causes the opposite of what you wanted</div><div class="e">"My detective plan completely backfired."</div></div>
+        <div class="vocab-card"><div class="w">relief</div><div class="d">the good feeling when worry stops</div><div class="e">"Finding the trophy was pure relief."</div></div>
+        <div class="vocab-card"><div class="w">plausible</div><div class="d">reasonable enough to be true</div><div class="e">"His magic-trick excuse actually sounded plausible."</div></div>
+      </div>
+
+      <p class="vocab-note">You'll hear several of these again in Text 2, the Tense Detective quiz, and the speaking activities &mdash; so you don't need to memorize the list, just recognize it when it shows up.</p>
+    </div>
+  </section>
+
+  <section class="block" id="text2">
+    <div class="block-label"><span class="block-num">3</span><h2>Text 2 &middot; Lesson Reading</h2></div>
+    <article class="article compact">
+      <h3 class="headline">The Note in My Locker</h3>
+      <p class="teaser">A short, twisty read for extra tense practice &mdash; same rules, new mystery.</p>
+      <p>I opened my locker on Monday morning and found a folded note I <span class="pp">hadn't put</span> there. It said: <em>"I know what you did."</em> My stomach dropped. Who <span class="pp">had written</span> it? I <span class="pp">hadn't done</span> anything wrong &mdash; at least, nothing I could think of. All day, I felt <span class="vword">nervous</span>, replaying every conversation I<span class="pp">'d had</span> that week, searching for a <span class="vword">clue</span>. By lunch, I <span class="pp">had convinced</span> myself that half the school <span class="vword">suspected</span> me of something.</p>
+      <p>I <span class="ps">confronted</span> my friend Elif, since she<span class="pp">'d been acting</span> oddly distant. She <span class="ps">looked</span> confused, then <span class="ps">laughed</span> so hard she nearly cried. <span class="connector">Turns out</span>, she<span class="pp">'d written</span> the note for a completely different Aylin &mdash; there are three Aylins in our year &mdash; and she<span class="pp">'d put</span> it in the wrong locker by <span class="vword">mistake</span>. I felt <span class="vword">relief</span>, then <span class="vword">embarrassed</span>, then relief again.</p>
+      <p class="cta-line">Lesson learned: not every mystery is about you. Sometimes it's just a mix-up with someone else's homework drama.</p>
+    </article>
+  </section>
+
+  <section class="block" id="grammar">
+    <div class="block-label"><span class="block-num">4</span><h2>Grammar Contrast</h2></div>
+    <div class="card">
+      <h4>Look at these pairs from the article</h4>
+
+      <div class="contrast-grid">
+        <div class="contrast-col ps-col">
+          <h5>Past Simple</h5>
+          <p>&ldquo;The trophy vanished.&rdquo;<br>&ldquo;I confronted him.&rdquo;<br>&ldquo;I found it myself.&rdquo;</p>
+        </div>
+        <div class="contrast-col pp-col">
+          <h5>Past Perfect</h5>
+          <p>&ldquo;Someone had broken the lock.&rdquo;<br>&ldquo;He had been hiding something.&rdquo;<br>&ldquo;I had moved it the week before.&rdquo;</p>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <svg viewBox="0 0 600 100" preserveAspectRatio="xMidYMid meet">
+          <line x1="20" y1="60" x2="580" y2="60" stroke="var(--line)" stroke-width="2"/>
+          <circle cx="120" cy="60" r="6" fill="var(--accent)"/>
+          <text x="120" y="34" text-anchor="middle">had broken the lock</text>
+          <text x="120" y="82" text-anchor="middle">earlier &mdash; past perfect</text>
+          <circle cx="470" cy="60" r="6" fill="var(--twist)"/>
+          <text x="470" y="34" text-anchor="middle">the trophy vanished</text>
+          <text x="470" y="82" text-anchor="middle">main story &mdash; past simple</text>
+          <line x1="130" y1="60" x2="460" y2="60" stroke="var(--accent)" stroke-width="2" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="var(--accent)"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+
+      <div class="cq"><span class="cq-num">Q1</span><span>Which tense tells the story in the order it happened &mdash; one event, then the next?</span></div>
+      <div class="cq"><span class="cq-num">Q2</span><span>When Ms. Ortiz found the case empty, had the lock already been broken, or did it break at that exact moment?</span></div>
+      <div class="cq"><span class="cq-num">Q3</span><span>Why does the writer say &ldquo;I had moved it the week before&rdquo; instead of just &ldquo;I moved it&rdquo;? What does &ldquo;had&rdquo; add?</span></div>
+
+      <div class="rule-box">
+        Complete the rule: We use <strong>past simple</strong> for the events of the story, told in order. We use <span class="blank"></span> + <span class="blank"></span> (past participle) for something that had <em>already</em> happened <strong>before</strong> that story starts &mdash; the hidden backstory behind the twist.
+      </div>
+
+      <details class="answer-key">
+        <summary>Show answer key</summary>
+        <p style="margin-top:10px; color:var(--ink-soft); font-size:14px;">
+          Q1: Past simple. &nbsp; Q2: It had already been broken &mdash; that's why past perfect is used. &nbsp;
+          Q3: &ldquo;Had&rdquo; shows the moving happened before the main story's events, not at the same time. &nbsp;
+          Rule: <b style="color:var(--ink);">had</b> + <b style="color:var(--ink);">past participle</b>.
+        </p>
+      </details>
+
+      <div class="fact-box">
+        <b>🇹🇷 Cheat code you already own:</b> Turkish already has this exact idea &mdash; the <em>-mıştı</em> form. &ldquo;Ödevimi çoktan yapmıştım&rdquo; means exactly &ldquo;I had already done my homework.&rdquo; You've been thinking in past perfect your whole life. English just makes you use two words instead of one suffix. Rude, but fair.
+        <div class="tr-example">yapmıştım &rarr; had done &middot; gitmiştim &rarr; had gone &middot; unutmuştum &rarr; had forgotten</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="detective">
+    <div class="block-label"><span class="block-num">5</span><h2>Tense Detective</h2></div>
+    <div class="card">
+      <h4>Identify the tense &mdash; then check yourself</h4>
+      <p class="sub">Read each line out loud. Say Past Simple or Past Perfect, then click Reveal. Get it right and Kedi celebrates. Get it wrong and Kedi <em>also</em> celebrates, just more sarcastically.</p>
+
+      <div class="td-item">
+        <div class="td-sentence">&ldquo;Ms. Ortiz walked into the hall.&rdquo;</div>
+        <div class="td-buttons">
+          <button onclick="reveal(this)">Reveal</button>
+          <span class="confetti-zone"></span>
+        </div>
+        <div class="td-answer"><b>Past Simple</b> &mdash; one action in the main timeline.<span class="joke">🎉 Correct-ish energy. Ms. Ortiz would be proud.</span></div>
+      </div>
+      <div class="td-item">
+        <div class="td-sentence">&ldquo;He had been acting weird all week.&rdquo;</div>
+        <div class="td-buttons">
+          <button onclick="reveal(this)">Reveal</button>
+          <span class="confetti-zone"></span>
+        </div>
+        <div class="td-answer"><b>Past Perfect</b> &mdash; background true before the confrontation.<span class="joke">👀 Suspicious grammar for a suspicious guy.</span></div>
+      </div>
+      <div class="td-item">
+        <div class="td-sentence">&ldquo;She'd been acting oddly distant.&rdquo;</div>
+        <div class="td-buttons">
+          <button onclick="reveal(this)">Reveal</button>
+          <span class="confetti-zone"></span>
+        </div>
+        <div class="td-answer"><b>Past Perfect</b> &mdash; from Text 2, background before the confrontation.<span class="joke">🕵️ Three Aylins in one year is genuinely chaotic.</span></div>
+      </div>
+      <div class="td-item">
+        <div class="td-sentence">&ldquo;He had borrowed the prop from the drama department.&rdquo;</div>
+        <div class="td-buttons">
+          <button onclick="reveal(this)">Reveal</button>
+          <span class="confetti-zone"></span>
+        </div>
+        <div class="td-answer"><b>Past Perfect</b> &mdash; explains the twist.<span class="joke">🎭 Plot twist: he was just theatre kid-ing.</span></div>
+      </div>
+      <div class="td-item">
+        <div class="td-sentence">&ldquo;I apologized to Jonas about seventeen times.&rdquo;</div>
+        <div class="td-buttons">
+          <button onclick="reveal(this)">Reveal</button>
+          <span class="confetti-zone"></span>
+        </div>
+        <div class="td-answer"><b>Past Simple</b> &mdash; the final event that closes the story.<span class="joke">😅 Seventeen is a lot, but honestly, fair.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="speaking">
+    <div class="block-label"><span class="block-num">6</span><h2>Speaking Studio &mdash; 5 Activities</h2></div>
+
+    <div class="mascot">
+      <span class="avatar">🐱</span>
+      <p class="bubble">No hiding behind a group today. It's you, me, and one very judgmental cat. Let's talk.</p>
+    </div>
+
+    <div class="card">
+
+      <div class="activity">
+        <span class="mission-tag d">1 &middot; Warm-Up</span>
+        <h4>Two Truths and a Lie (Past Perfect Edition)</h4>
+        <p class="sub">Light and fast &mdash; gets your voice moving before the harder activities.</p>
+        <p>Tell me three things that had already happened before you turned 10. Two are true, one is a lie. I have to guess.</p>
+        <ul class="truth-lie">
+          <li><b>Example</b> &ldquo;By the time I was 10, I <i>had already</i> broken my arm twice, I <i>had</i> never <i>eaten</i> a vegetable, and I <i>had</i> already <i>visited</i> three countries.&rdquo;</li>
+        </ul>
+      </div>
+
+      <div class="activity">
+        <span class="mission-tag a">2 &middot; Roleplay</span>
+        <h4>The Interrogation (We Swap Roles)</h4>
+        <p class="sub">Fun and thought-provoking &mdash; you have to build a believable story on the spot.</p>
+        <p>Round 1: I'm the Detective, you're the Suspect. Round 2: we swap &mdash; you interrogate me about a "crime" I clearly did not commit (I'm innocent, I swear). Detective asks what happened (past simple); Suspect must explain what had <em>already</em> happened before that (past perfect) to survive.</p>
+
+        <div class="role-grid">
+          <div class="role-card">
+            <h5>Detective asks</h5>
+            <ul>
+              <li>Where were you when it disappeared?</li>
+              <li>What did you do right before that?</li>
+              <li>Why were you acting so strange?</li>
+            </ul>
+          </div>
+          <div class="role-card">
+            <h5>Suspect must explain</h5>
+            <ul>
+              <li>Something you had already done earlier</li>
+              <li>A reason you had been avoiding people</li>
+              <li>A secret you had been keeping &mdash; unrelated to the "crime"</li>
+            </ul>
+          </div>
+        </div>
+
+        <ul class="starters">
+          <li class="ps-line"><b>Detective:</b> &ldquo;So what <i>happened</i> exactly?&rdquo;</li>
+          <li class="pp-line"><b>Suspect:</b> &ldquo;Well, before that, I <i>had already</i>&hellip;&rdquo;</li>
+          <li class="pp-line"><b>Suspect:</b> &ldquo;I was acting strange because I <i>had been</i>&hellip;&rdquo;</li>
+        </ul>
+      </div>
+
+      <div class="activity">
+        <span class="mission-tag c">3 &middot; Deduction Game</span>
+        <h4>Suspect Line-Up</h4>
+        <p class="sub">Fun and vocabulary-heavy &mdash; you build a case using the word bank, I try to guess wrong on purpose.</p>
+        <p>Pick one "suspect" below without telling me which. Describe them using at least 4 vocabulary words and both tenses &mdash; what they did, and what they'd already done before that made them look suspicious. I guess who it is. Then we switch: I describe, you guess.</p>
+
+        <div class="suspect-grid">
+          <div class="suspect-card"><div class="s-emoji">🎭</div><div class="s-name">The Drama Kid</div><div class="s-detail">had been rehearsing all week</div></div>
+          <div class="suspect-card"><div class="s-emoji">📚</div><div class="s-name">The Quiet Genius</div><div class="s-detail">had already finished every exam early</div></div>
+          <div class="suspect-card"><div class="s-emoji">⚽</div><div class="s-name">The Team Captain</div><div class="s-detail">had promised to keep a secret</div></div>
+        </div>
+
+        <ul class="starters">
+          <li class="pp-line"><b>Example:</b> &ldquo;This person <i>had been acting</i> suspicious, and everyone <i>assumed</i> they were guilty &mdash; but they <i>had</i> a plausible alibi.&rdquo;</li>
+        </ul>
+      </div>
+
+      <div class="activity">
+        <span class="mission-tag b">4 &middot; Storytelling</span>
+        <h4>Twist Retell</h4>
+        <p class="sub">Fun and creative &mdash; same facts, new narrator, new drama.</p>
+        <p>Retell the whole trophy story to me from <strong>Jonas's</strong> point of view. Keep the twist, but this time we hear what he had been secretly planning all along, before the accusation happened. Make it dramatic. Kedi is judging your storytelling skills.</p>
+
+        <ul class="starters">
+          <li class="ps-line"><b>Main events (past simple):</b> &ldquo;<i>On Friday, my friend accused me</i>&hellip;&rdquo;</li>
+          <li class="pp-line"><b>Backstory (past perfect):</b> &ldquo;<i>What she didn't know was that I had</i>&hellip;&rdquo;</li>
+        </ul>
+      </div>
+
+      <div class="activity">
+        <span class="mission-tag e">5 &middot; Discussion</span>
+        <h4>The Verdict</h4>
+        <p class="sub">Thought-provoking &mdash; no right answer, just your honest opinion, in English.</p>
+        <p>This one isn't a game. I want your real opinion, explained in full sentences.</p>
+        <ul class="debate-prompts">
+          <li>Was the narrator right to suspect Jonas before she had any real evidence &mdash; or was that an unfair assumption?</li>
+          <li>Jonas never explained himself until he was confronted. Should he have told the truth earlier, or was hiding a talent-show surprise okay?</li>
+          <li>Have you ever assumed something about a friend that turned out to be completely wrong? What had actually happened?</li>
+        </ul>
+      </div>
+
+      <h4 style="margin-top:24px;">Self-check before you speak</h4>
+      <ul class="checklist">
+        <li><input type="checkbox" id="c1"><label for="c1">Used past simple for the main sequence of events</label></li>
+        <li><input type="checkbox" id="c2"><label for="c2">Used past perfect at least twice for background/earlier events</label></li>
+        <li><input type="checkbox" id="c3"><label for="c3">Used at least 3 words from the vocabulary bank</label></li>
+        <li><input type="checkbox" id="c4"><label for="c4">Gave a real opinion in The Verdict, not just "I don't know"</label></li>
+      </ul>
+
+      <h4>Timing (25 min total)</h4>
+      <div class="timing-strip">
+        <span class="active">3 &middot; warm-up</span>
+        <span class="active">6 &middot; interrogation</span>
+        <span class="active c">5 &middot; line-up</span>
+        <span class="active b">6 &middot; retell</span>
+        <span class="active">5 &middot; verdict</span>
+      </div>
+
+      <div class="blooper">
+        <h5>Blooper Reel (Read These Out Loud for a Laugh)</h5>
+        <ul>
+          <li>&ldquo;I had ate the evidence before anyone saw.&rdquo; &mdash; nice try, but it's <i>had eaten</i>. The trophy was not, in fact, edible.</li>
+          <li>&ldquo;She was already gone when I had arrived.&rdquo; &mdash; close! Flip it: <i>she had already gone</i> when I <i>arrived</i>.</li>
+          <li>If you say &ldquo;I had went&rdquo; one more time, Kedi will personally stage an intervention. 🐱⚖️</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="assignment">
+    <div class="block-label"><span class="block-num">7</span><h2>Text 3 &middot; Assignment</h2></div>
+    <article class="article compact">
+      <h3 class="headline">Two Seats, One Empty</h3>
+      <p class="teaser">Read this one at home, before our next lesson.</p>
+
+      <p>When Deniz didn't show up for the class trip, everyone assumed the worst. She'd been quiet all week, and rumors started before the bus even left the parking lot. Some said she'd gotten in trouble. Others whispered that she and her best friend Mira had had a huge fight, and that Deniz had decided to skip the whole day out of spite.</p>
+
+      <p>Mira sat alone near the window, saying nothing. She'd already heard every theory twice, and none of them were true, but she hadn't corrected anyone &mdash; because the real reason felt too personal to explain to a bus full of gossiping classmates.</p>
+
+      <p>The truth came out at lunch. Deniz's grandmother, who had raised her since she was small, had been taken to the hospital that morning. Deniz had called Mira at six a.m., crying, and Mira had told her to stay home, that she'd explain everything later. Mira had kept the secret all day, not because she'd wanted to, but because Deniz had asked her to.</p>
+
+      <p>When the whispers finally reached Mira directly, she didn't explode. She just said, quietly, &ldquo;You'd already decided what happened before you asked me. Next time, ask first.&rdquo;</p>
+
+      <p>Nobody said anything for the rest of the bus ride.</p>
+
+      <div class="assignment-box">
+        <h5>Before our next lesson</h5>
+        <ol>
+          <li>Read the story once for the story. Then read it again and underline every past perfect verb (&ldquo;had&rdquo; + past participle) you can find &mdash; there are at least ten.</li>
+          <li>Think about your answer: was Mira right to keep the secret, or should she have explained sooner? Would you have done the same?</li>
+          <li>Prepare a 60-second retell of the story from <strong>Deniz's</strong> point of view &mdash; we'll record it at the start of next lesson.</li>
+        </ol>
+      </div>
+    </article>
+  </section>
+
+  <section class="block" id="teacher">
+    <div class="block-label"><span class="block-num">8</span><h2>Teacher Facilitation Notes</h2></div>
+    <div class="notes-grid">
+      <div class="note warn">
+        <h5>Learner Profile</h5>
+        <p>1:1 session, learner age 14, B1 Turkish-speaking student. Turkish has a direct structural parallel to English past perfect (-mış + -tı), a genuine advantage &mdash; lean on that bridge rather than re-teaching the concept from zero.</p>
+      </div>
+      <div class="note">
+        <h5>Vocabulary Sequencing</h5>
+        <p>The 30-word bank is deliberately ordered easy&ndash;hard&ndash;easy&ndash;hard (clue&rarr;accuse&rarr;secret&rarr;suspicious&rarr;&hellip;) rather than sorted by level. This keeps momentum and confidence up without her noticing a difficulty ramp &mdash; do not relabel or resort the list in front of her.</p>
+      </div>
+      <div class="note">
+        <h5>Pain Points</h5>
+        <p>The concept transfers easily from Turkish, but the two-word English structure and irregular participles (ate&rarr;eaten, went&rarr;gone) are the real friction &mdash; drill those, not the tense logic itself.</p>
+      </div>
+      <div class="note">
+        <h5>Keeping It Light</h5>
+        <p>With one student, energy dips fast if it feels like a drill. Mascot asides, the Blooper Reel, and letting her "catch" your deliberately wrong sentences in Activity 2 Round 2 keep it playful without losing the grammar target. The Verdict discussion is the one place to slow down and let her think.</p>
+      </div>
+      <div class="note full">
+        <h5>60-Minute Timing Breakdown</h5>
+        <p>Text 1 + Legend Walkthrough (8 min) &rarr; Vocabulary Bank (6 min) &rarr; Text 2 (5 min) &rarr; Grammar Contrast + Turkish Bridge (8 min) &rarr; Tense Detective quickfire (6 min) &rarr; Speaking Studio, Activities 1&ndash;5 (25 min) &rarr; Blooper Reel, wrap-up, assign Text 3 (2 min).</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Glow-Up English &middot; 1:1 Speaking Session</span>
+    <span>Past Simple vs. Past Perfect &middot; with Detective Kedi 🐱</span>
+  </footer>
+
+</div>
+
+<script>
+  function reveal(btn){
+    var item = btn.closest('.td-item');
+    var answer = item.querySelector('.td-answer');
+    answer.classList.add('show');
+    var zone = item.querySelector('.confetti-zone');
+    var pieces = ['🎉','✨','🕵️','😂','🔍'];
+    for (var i=0; i<6; i++){
+      var span = document.createElement('span');
+      span.className = 'confetti-piece';
+      span.textContent = pieces[Math.floor(Math.random()*pieces.length)];
+      var angle = Math.random()*Math.PI*2;
+      var dist = 40 + Math.random()*40;
+      span.style.setProperty('--dx', Math.cos(angle)*dist + 'px');
+      span.style.setProperty('--dy', (Math.sin(angle)*dist - 20) + 'px');
+      span.style.setProperty('--rot', (Math.random()*360 - 180) + 'deg');
+      zone.appendChild(span);
+      (function(s){ setTimeout(function(){ s.remove(); }, 950); })(span);
+    }
+  }
+</script>
+</body>
+</html>
